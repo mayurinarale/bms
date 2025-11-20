@@ -9,8 +9,6 @@ const showTimes = [
   { id: '22:10', label: '10:10 PM', meta: 'Kannada • 2D', status: 'available' }
 ]
 
-const quantityOptions = Array.from({ length: 10 }, (_, index) => index + 1)
-
 const createRow = (rowLabel, seatCount, price, options = {}) => {
   const { sold = [], blocked = [], gapAfter = [] } = options
   const soldSet = new Set(sold)
@@ -94,6 +92,27 @@ const seatGroups = [
     ]
   }
 ]
+
+const getTotalAvailableSeats = () =>
+  seatGroups.reduce(
+    (total, group) =>
+      total +
+      group.rows.reduce(
+        (rowTotal, row) =>
+          rowTotal +
+          row.seats.reduce((seatTotal, seat) => {
+            if (seat.type === 'gap') {
+              return seatTotal
+            }
+            return seat.status === 'available' ? seatTotal + 1 : seatTotal
+          }, 0),
+        0
+      ),
+    0
+  )
+
+const totalAvailableSeats = getTotalAvailableSeats()
+const quantityOptions = Array.from({ length: totalAvailableSeats }, (_, index) => index + 1)
 
 const formatCurrency = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value)
 
