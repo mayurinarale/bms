@@ -131,6 +131,8 @@ function App() {
   })
   const [showCvv, setShowCvv] = useState(false)
   const [giftVoucherCode, setGiftVoucherCode] = useState('')
+  const [bankSearchQuery, setBankSearchQuery] = useState('')
+  const [redeemPointsSearchQuery, setRedeemPointsSearchQuery] = useState('')
 
   const selectedTotal = useMemo(
     () =>
@@ -191,7 +193,7 @@ function App() {
               ←
             </button>
             <div>
-              <h1 className="text-xl font-semibold mb-1">Maarutha • U/A</h1>
+              <h1 className="text-lg font-semibold mb-1">Maarutha • U/A</h1>
               <p className="text-sm text-gray-400">PVR: Orion Mall, Dr Rajkumar Road • {selectedShow?.label} • {selectedShow?.meta}</p>
             </div>
           </div>
@@ -203,7 +205,7 @@ function App() {
           <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 flex-[0_0_65%] grid grid-cols-[280px_1fr] gap-6">
             {/* Left Part: Payment Options List (Tab Menu) */}
             <div>
-              <h2 className="text-lg font-semibold mb-6 text-white">Payment options</h2>
+              <h2 className="text-base font-semibold mb-6 text-white">Payment options</h2>
               <div className="space-y-3">
                 {[
                   { id: 'upi', label: 'Pay by any UPI App', icon: 'UPI' },
@@ -212,7 +214,7 @@ function App() {
                   { id: 'gift', label: 'Gift Voucher', icon: '🎁' },
                   { id: 'netbanking', label: 'Net Banking', icon: '🏦' },
                   { id: 'paylater', label: 'Pay Later', icon: '₹' },
-                  { id: 'points', label: 'Redeem Points', icon: '123' }
+                  { id: 'points', label: 'Redeem Points', icon: '⭐' }
                 ].map((method) => (
                   <button
                     key={method.id}
@@ -247,9 +249,9 @@ function App() {
                       <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
                         <span className="text-2xl font-bold text-[#4285f4]">G</span>
                       </div>
-                      <span className="font-medium">Google Pay</span>
+                      <span className="text-sm font-medium">Google Pay</span>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                   <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
                     <div className="flex items-center gap-3">
@@ -257,11 +259,11 @@ function App() {
                         <span className="text-2xl">+</span>
                       </div>
                       <div className="text-left">
-                        <div className="font-medium mb-1">Add new UPI</div>
+                        <div className="text-sm font-medium mb-1">Add new UPI</div>
                         <div className="text-xs text-gray-500">You need to have a registered UPI ID</div>
                       </div>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                   <div className="flex items-center gap-3 my-4">
                     <div className="flex-1 h-px bg-[#2d3140]"></div>
@@ -274,11 +276,11 @@ function App() {
                         <div className="w-8 h-8 border-2 border-gray-500 rounded"></div>
                       </div>
                       <div className="text-left">
-                        <div className="font-medium mb-1">Scan QR code</div>
+                        <div className="text-sm font-medium mb-1">Scan QR code</div>
                         <div className="text-xs text-gray-500">You need to have a registered UPI ID</div>
                       </div>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                 </div>
               )}
@@ -409,11 +411,11 @@ function App() {
                         <span className="text-xs font-bold text-[#ff9900]">amazon</span>
                       </div>
                       <div className="text-left">
-                        <div className="font-medium mb-1">Amazon Pay Balance</div>
+                        <div className="text-sm font-medium mb-1">Amazon Pay Balance</div>
                         <div className="text-xs text-gray-500">Pay using Amazon Pay Balance and get upto INR 75* back. *T&C Apply</div>
                       </div>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                   <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
                     <div className="flex items-center gap-3">
@@ -421,7 +423,7 @@ function App() {
                         <span className="text-xs font-bold text-white">M</span>
                       </div>
                       <div className="text-left flex-1">
-                        <div className="font-medium mb-1">Mobikwik</div>
+                        <div className="text-sm font-medium mb-1">Mobikwik</div>
                         <div className="text-xs text-gray-500">Pay Using Mobikwik & Get upto 30% Cashback. *T&C Apply.</div>
                       </div>
                       <button className="bg-[#ff4d5a] hover:bg-[#ff6b7a] text-white px-4 py-2 rounded text-sm font-medium">
@@ -436,11 +438,11 @@ function App() {
                         <span className="text-xs font-bold text-white">P</span>
                       </div>
                       <div className="text-left">
-                        <div className="font-medium mb-1">Paytm</div>
+                        <div className="text-sm font-medium mb-1">Paytm</div>
                         <div className="text-xs text-gray-500">Paytm (Wallet | UPI | Saved Cards)</div>
                       </div>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                   <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
                     <div className="flex items-center gap-3">
@@ -448,11 +450,11 @@ function App() {
                         <span className="text-xs font-bold text-white">PZ</span>
                       </div>
                       <div className="text-left">
-                        <div className="font-medium mb-1">PayZapp</div>
+                        <div className="text-sm font-medium mb-1">PayZapp</div>
                         <div className="text-xs text-gray-500">PayZapp (Wallet | Saved Cards)</div>
                       </div>
                     </div>
-                    <span className="text-xl">→</span>
+                    <span className="text-lg">→</span>
                   </button>
                 </div>
               )}
@@ -476,7 +478,173 @@ function App() {
                   </button>
                 </div>
               )}
-              {selectedPaymentMethod !== 'upi' && selectedPaymentMethod !== 'card' && selectedPaymentMethod !== 'wallet' && selectedPaymentMethod !== 'gift' && (
+              {selectedPaymentMethod === 'netbanking' && (
+                <div className="space-y-4">
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search by Bank Name"
+                      value={bankSearchQuery}
+                      onChange={(e) => setBankSearchQuery(e.target.value)}
+                      className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                    />
+                    <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+
+                  {/* Popular Banks */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-400 mb-3">Popular Banks</h3>
+                    <div className="space-y-2">
+                      {[
+                        { name: 'SBI Bank', logo: 'SBI', color: 'bg-blue-700' },
+                        { name: 'HDFC Bank', logo: 'HDFC', color: 'bg-blue-600' },
+                        { name: 'ICICI Bank', logo: 'ICICI', color: 'bg-orange-600' },
+                        { name: 'AXIS Bank', logo: 'AXIS', color: 'bg-red-600' }
+                      ]
+                        .filter(bank => bank.name.toLowerCase().includes(bankSearchQuery.toLowerCase()))
+                        .map((bank) => (
+                          <button
+                            key={bank.name}
+                            className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-3 rounded-lg flex items-center justify-between text-gray-300 transition-all"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-12 h-12 ${bank.color} rounded-lg flex items-center justify-center`}>
+                                <span className="text-xs font-bold text-white">{bank.logo}</span>
+                              </div>
+                              <span className="text-sm font-medium">{bank.name}</span>
+                            </div>
+                            <span className="text-lg">→</span>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Other Banks */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-400 mb-3">Other Banks</h3>
+                    <div className="space-y-2">
+                      {[
+                        { name: 'Kotak Bank', logo: 'KB', color: 'bg-purple-600' },
+                        { name: 'Bank of India', logo: 'BOI', color: 'bg-yellow-600' },
+                        { name: 'Bank of Maharashtra', logo: 'BOM', color: 'bg-green-600' },
+                        { name: 'Central Bank of India', logo: 'CBI', color: 'bg-red-600' },
+                        { name: 'Canara Bank', logo: 'CB', color: 'bg-blue-600' }
+                      ]
+                        .filter(bank => bank.name.toLowerCase().includes(bankSearchQuery.toLowerCase()))
+                        .map((bank) => (
+                          <button
+                            key={bank.name}
+                            className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-3 rounded-lg flex items-center justify-between text-gray-300 transition-all"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-12 h-12 ${bank.color} rounded-lg flex items-center justify-center`}>
+                                <span className="text-xs font-bold text-white">{bank.logo}</span>
+                              </div>
+                              <span className="text-sm font-medium">{bank.name}</span>
+                            </div>
+                            <span className="text-lg">→</span>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {selectedPaymentMethod === 'paylater' && (
+                <div className="space-y-3">
+                  <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-[#ff6b35] rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">LP</span>
+                      </div>
+                      <span className="text-sm font-medium">LazyPay Credit</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button className="bg-[#ff4d5a] hover:bg-[#ff6b7a] text-white px-4 py-2 rounded text-sm font-medium">
+                        LINK ACCOUNT
+                      </button>
+                      <span className="text-lg">→</span>
+                    </div>
+                  </button>
+                </div>
+              )}
+              {selectedPaymentMethod === 'points' && (
+                <div className="space-y-4">
+                  {/* Sub-header */}
+                  <h3 className="text-base font-semibold text-white">Redeem Points</h3>
+
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search by Bank Name"
+                      value={redeemPointsSearchQuery}
+                      onChange={(e) => setRedeemPointsSearchQuery(e.target.value)}
+                      className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                    />
+                    <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+
+                  {/* Pay with Rewards */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-400 mb-3">Pay with Rewards</h4>
+                    <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[#ff6b35] to-[#f7931e] rounded-lg flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">R</span>
+                        </div>
+                        <div className="text-left">
+                          <div className="text-sm font-medium mb-1">Pay with Rewards</div>
+                          <div className="text-xs text-gray-500">Unlock rewards up to Rs.500 *T&C Apply</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button className="bg-[#ff4d5a] hover:bg-[#ff6b7a] text-white px-4 py-2 rounded text-sm font-medium">
+                          LINK ACCOUNT
+                        </button>
+                        <span className="text-lg">→</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Banking Partners */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-400 mb-3">Banking Partners</h4>
+                    <div className="space-y-2">
+                      {[
+                        { name: 'Yes Bank Debit Card', logo: 'Y', color: 'bg-blue-600' },
+                        { name: 'AU Bank Credit Card', logo: 'AU', color: 'bg-orange-600' },
+                        { name: 'Bandhan Bank', logo: 'B', color: 'bg-red-600' },
+                        { name: 'Bank of India Debit Card', logo: '★', color: 'bg-yellow-600' },
+                        { name: 'Canara Bank Credit Card', logo: 'CB', color: 'bg-blue-600' },
+                        { name: 'Canara Bank Debit Card', logo: 'CB', color: 'bg-blue-600' },
+                        { name: 'Central Bank of India Credit Card', logo: 'CBI', color: 'bg-red-600' },
+                        { name: 'Central Bank of India', logo: 'CBI', color: 'bg-red-600' }
+                      ]
+                        .filter(bank => bank.name.toLowerCase().includes(redeemPointsSearchQuery.toLowerCase()))
+                        .map((bank) => (
+                          <button
+                            key={bank.name}
+                            className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-3 rounded-lg flex items-center justify-between text-gray-300 transition-all"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-12 h-12 ${bank.color} rounded-lg flex items-center justify-center`}>
+                                <span className="text-xs font-bold text-white">{bank.logo}</span>
+                              </div>
+                              <span className="text-sm font-medium">{bank.name}</span>
+                            </div>
+                            <span className="text-lg">→</span>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {selectedPaymentMethod !== 'upi' && selectedPaymentMethod !== 'card' && selectedPaymentMethod !== 'wallet' && selectedPaymentMethod !== 'gift' && selectedPaymentMethod !== 'netbanking' && selectedPaymentMethod !== 'paylater' && selectedPaymentMethod !== 'points' && (
                 <div className="text-center text-gray-400 py-12">
                   <p>Payment method details will appear here</p>
                 </div>
