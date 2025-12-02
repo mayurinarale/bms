@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import mopedArt from './assets/moped.png'
+import cineverseLogo from './assets/Untitled_design__4_-removebg-preview.png'
 
 const showTimes = [
   { id: '10:25', label: '10:25 AM', meta: 'Kannada • 2D', status: 'almost-full' },
@@ -122,6 +123,13 @@ function App() {
   const [isTicketModalOpen, setTicketModalOpen] = useState(false)
   const [isPaymentPageOpen, setIsPaymentPageOpen] = useState(false)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('upi')
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: '',
+    expiry: '',
+    cvv: '',
+    cardHolderName: ''
+  })
+  const [showCvv, setShowCvv] = useState(false)
 
   const selectedTotal = useMemo(
     () =>
@@ -174,7 +182,7 @@ function App() {
       <div className="min-h-screen bg-[#0f1219] text-white">
         {/* Header */}
         <div className="bg-[#1a1d29] border-b border-[#2a2d3a] px-6 py-4">
-          <div className="max-w-7xl mx-auto flex items-center gap-4">
+          <div className="w-[92%] mx-auto max-w-[1240px] flex items-center gap-4">
             <button 
               onClick={() => setIsPaymentPageOpen(false)}
               className="text-gray-400 hover:text-white text-2xl"
@@ -189,9 +197,9 @@ function App() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
+        <div className="w-[92%] mx-auto my-5 max-w-[1240px] flex gap-6" style={{ gap: '24px' }}>
           {/* Left Column: Payment Options (divided into two parts) */}
-          <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 grid grid-cols-[280px_1fr] gap-6">
+          <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 flex-[0_0_65%] grid grid-cols-[280px_1fr] gap-6">
             {/* Left Part: Payment Options List (Tab Menu) */}
             <div>
               <h2 className="text-lg font-semibold mb-6 text-white">Payment options</h2>
@@ -273,7 +281,96 @@ function App() {
                   </button>
                 </div>
               )}
-              {selectedPaymentMethod !== 'upi' && (
+              {selectedPaymentMethod === 'card' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">CARD NUMBER</label>
+                    <input
+                      type="text"
+                      placeholder="Enter card number"
+                      value={cardDetails.cardNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\s/g, '').replace(/\D/g, '').slice(0, 16)
+                        const formatted = value.match(/.{1,4}/g)?.join(' ') || value
+                        setCardDetails({ ...cardDetails, cardNumber: formatted })
+                      }}
+                      className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                      maxLength={19}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">EXPIRY (MM/YY)</label>
+                      <input
+                        type="text"
+                        placeholder="MM/YY"
+                        value={cardDetails.expiry}
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/\D/g, '').slice(0, 4)
+                          if (value.length >= 2) {
+                            value = value.slice(0, 2) + '/' + value.slice(2)
+                          }
+                          setCardDetails({ ...cardDetails, expiry: value })
+                        }}
+                        className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                        maxLength={5}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">CVV</label>
+                      <div className="relative">
+                        <input
+                          type={showCvv ? 'text' : 'password'}
+                          placeholder="CVV"
+                          value={cardDetails.cvv}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 3)
+                            setCardDetails({ ...cardDetails, cvv: value })
+                          }}
+                          className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 pr-10 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                          maxLength={3}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCvv(!showCvv)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                        >
+                          {showCvv ? (
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                            </svg>
+                          ) : (
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">CARD HOLDER NAME</label>
+                    <input
+                      type="text"
+                      placeholder="Enter card holder name"
+                      value={cardDetails.cardHolderName}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^a-zA-Z\s]/g, '')
+                        setCardDetails({ ...cardDetails, cardHolderName: value })
+                      }}
+                      className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                    />
+                  </div>
+                  <button
+                    disabled={!cardDetails.cardNumber || !cardDetails.expiry || cardDetails.expiry.length < 5 || !cardDetails.cvv || cardDetails.cvv.length < 3 || !cardDetails.cardHolderName}
+                    className="w-full bg-[#2d3140] text-gray-500 rounded-lg px-4 py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed enabled:bg-[#ff4d5a] enabled:text-white enabled:hover:bg-[#ff6b7a] transition-all"
+                  >
+                    Pay Now
+                  </button>
+                </div>
+              )}
+              {selectedPaymentMethod !== 'upi' && selectedPaymentMethod !== 'card' && (
                 <div className="text-center text-gray-400 py-12">
                   <p>Payment method details will appear here</p>
                 </div>
@@ -282,7 +379,7 @@ function App() {
           </div>
 
           {/* Right: Order Summary (Sticky Sidebar) */}
-          <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 sticky top-6 h-fit">
+          <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 flex-[0_0_35%] sticky top-6 h-fit">
             <h2 className="text-lg font-semibold mb-4 text-white">Order Summary</h2>
             
             {/* Module 1: Event Details */}
@@ -381,8 +478,8 @@ function App() {
         </div>
 
         {/* Footer */}
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="text-white text-sm font-semibold">book my show</div>
+        <div className="w-[92%] mx-auto max-w-[1240px] px-6 py-4">
+          <img src={cineverseLogo} alt="Cineverse" className="h-20 w-auto" />
         </div>
       </div>
     )
