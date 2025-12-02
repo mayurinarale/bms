@@ -130,6 +130,7 @@ function App() {
     cardHolderName: ''
   })
   const [showCvv, setShowCvv] = useState(false)
+  const [giftVoucherCode, setGiftVoucherCode] = useState('')
 
   const selectedTotal = useMemo(
     () =>
@@ -307,10 +308,40 @@ function App() {
                         value={cardDetails.expiry}
                         onChange={(e) => {
                           let value = e.target.value.replace(/\D/g, '').slice(0, 4)
+                          
+                          // Validate month (first 2 digits should be 01-12)
+                          if (value.length >= 2) {
+                            const month = parseInt(value.slice(0, 2))
+                            if (month > 12) {
+                              // If month is > 12, keep only the first digit (e.g., "13" becomes "1")
+                              value = value.slice(0, 1)
+                            } else if (value.length === 2 && month === 0) {
+                              // If user types "00", don't allow it
+                              value = value.slice(0, 1)
+                            }
+                          }
+                          
+                          // Format with slash
                           if (value.length >= 2) {
                             value = value.slice(0, 2) + '/' + value.slice(2)
                           }
+                          
                           setCardDetails({ ...cardDetails, expiry: value })
+                        }}
+                        onBlur={(e) => {
+                          // Validate year on blur
+                          const expiryValue = e.target.value.replace(/\D/g, '')
+                          if (expiryValue.length === 4) {
+                            const month = parseInt(expiryValue.slice(0, 2))
+                            const year = parseInt(expiryValue.slice(2, 4))
+                            const currentYear = new Date().getFullYear() % 100
+                            const currentMonth = new Date().getMonth() + 1
+                            
+                            // If year is in the past or month is invalid, clear it
+                            if (year < currentYear || (year === currentYear && month < currentMonth) || month < 1 || month > 12) {
+                              setCardDetails({ ...cardDetails, expiry: '' })
+                            }
+                          }
                         }}
                         className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
                         maxLength={5}
@@ -370,7 +401,82 @@ function App() {
                   </button>
                 </div>
               )}
-              {selectedPaymentMethod !== 'upi' && selectedPaymentMethod !== 'card' && (
+              {selectedPaymentMethod === 'wallet' && (
+                <div className="space-y-3">
+                  <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-[#ff9900]">amazon</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-medium mb-1">Amazon Pay Balance</div>
+                        <div className="text-xs text-gray-500">Pay using Amazon Pay Balance and get upto INR 75* back. *T&C Apply</div>
+                      </div>
+                    </div>
+                    <span className="text-xl">→</span>
+                  </button>
+                  <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-[#ff6b35] rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">M</span>
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="font-medium mb-1">Mobikwik</div>
+                        <div className="text-xs text-gray-500">Pay Using Mobikwik & Get upto 30% Cashback. *T&C Apply.</div>
+                      </div>
+                      <button className="bg-[#ff4d5a] hover:bg-[#ff6b7a] text-white px-4 py-2 rounded text-sm font-medium">
+                        LINK ACCOUNT
+                      </button>
+                    </div>
+                    <span className="text-xl ml-2">→</span>
+                  </button>
+                  <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-[#00baf2] rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">P</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-medium mb-1">Paytm</div>
+                        <div className="text-xs text-gray-500">Paytm (Wallet | UPI | Saved Cards)</div>
+                      </div>
+                    </div>
+                    <span className="text-xl">→</span>
+                  </button>
+                  <button className="w-full bg-[#252833] hover:bg-[#2d3140] px-4 py-4 rounded-lg flex items-center justify-between text-gray-300 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-[#1e88e5] rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">PZ</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-medium mb-1">PayZapp</div>
+                        <div className="text-xs text-gray-500">PayZapp (Wallet | Saved Cards)</div>
+                      </div>
+                    </div>
+                    <span className="text-xl">→</span>
+                  </button>
+                </div>
+              )}
+              {selectedPaymentMethod === 'gift' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">* Enter your GV code</label>
+                    <input
+                      type="text"
+                      placeholder="Please enter a gift voucher code"
+                      value={giftVoucherCode}
+                      onChange={(e) => setGiftVoucherCode(e.target.value)}
+                      className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                    />
+                  </div>
+                  <button
+                    disabled={!giftVoucherCode.trim()}
+                    className="w-full bg-[#2d3140] text-gray-500 rounded-lg px-4 py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed enabled:bg-[#ff4d5a] enabled:text-white enabled:hover:bg-[#ff6b7a] transition-all"
+                  >
+                    Pay Now
+                  </button>
+                </div>
+              )}
+              {selectedPaymentMethod !== 'upi' && selectedPaymentMethod !== 'card' && selectedPaymentMethod !== 'wallet' && selectedPaymentMethod !== 'gift' && (
                 <div className="text-center text-gray-400 py-12">
                   <p>Payment method details will appear here</p>
                 </div>
