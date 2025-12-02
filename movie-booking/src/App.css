@@ -174,13 +174,13 @@
 }
 
 .legend-dot--selected {
-  background: #ffe6e8;
-  border: 1px solid #ff4d5a;
+  background: #e4f5ed;
+  border: 1px solid #5db075;
 }
 
 .legend-dot--sold {
-  background: #e3e5eb;
-  border: 1px solid #b3b9c9;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
 }
 
 .seat-group {
@@ -246,20 +246,20 @@
 }
 
 .seat--available:hover {
-  border-color: #ff4d5a;
-  color: #ff4d5a;
+  border-color: #5db075;
+  box-shadow: 0 10px 30px rgba(93, 176, 117, 0.25);
 }
 
 .seat--selected {
-  background: #ffecf0;
-  border-color: #ff4d5a;
-  color: #ff4d5a;
+  background: #5db075;
+  border-color: #5db075;
+  color: #fff;
 }
 
 .seat--sold {
-  background: #eef0f6;
-  border-color: #d5dae7;
-  color: #a8afc5;
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
   cursor: not-allowed;
 }
 
