@@ -133,6 +133,12 @@ function App() {
   const [giftVoucherCode, setGiftVoucherCode] = useState('')
   const [bankSearchQuery, setBankSearchQuery] = useState('')
   const [redeemPointsSearchQuery, setRedeemPointsSearchQuery] = useState('')
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false)
+  const [contactDetails, setContactDetails] = useState({
+    email: 'mayurinarale0@gmail.com',
+    mobile: '9545583061',
+    state: 'Karnataka'
+  })
 
   const selectedTotal = useMemo(
     () =>
@@ -667,6 +673,14 @@ function App() {
                   <p className="text-sm text-gray-400 mt-1">PVR: Orion Mall, Dr Rajkumar Road • IMAX 2D</p>
                 </div>
                 <div className="flex items-center gap-2 ml-4">
+                  <button 
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="text-[#ff4d5a] hover:text-[#ff6b7a]"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </button>
                   <span className="text-sm text-gray-400 font-medium">{selectedSeats.length}</span>
                   <div className="w-8 h-8 bg-[#ff4d5a] rounded flex items-center justify-center">
                     <span className="text-xs text-white font-bold">M</span>
@@ -724,11 +738,19 @@ function App() {
             <div className="bg-[#252833] border border-[#2a2d3a] rounded-lg p-4 mb-4">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-semibold text-sm text-white">For Sending Booking Details</h3>
-                <button className="text-[#ff4d5a] text-sm font-medium hover:text-[#ff6b7a]">Edit</button>
+                <button 
+                  onClick={() => setIsContactModalOpen(true)}
+                  className="text-[#ff4d5a] text-sm font-medium hover:text-[#ff6b7a] flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                  Edit
+                </button>
               </div>
-              <p className="text-sm text-gray-300 mb-1 font-medium">+91-9545583061</p>
-              <p className="text-sm text-gray-300 mb-1">mayurinarale0@gmail.com</p>
-              <p className="text-sm text-gray-400">Karnataka (for GST purposes)</p>
+              <p className="text-sm text-gray-300 mb-1 font-medium">+91-{contactDetails.mobile}</p>
+              <p className="text-sm text-gray-300 mb-1">{contactDetails.email}</p>
+              <p className="text-sm text-gray-400">{contactDetails.state} (for GST purposes)</p>
             </div>
 
             {/* Module 5: Promos */}
@@ -755,6 +777,109 @@ function App() {
         <div className="w-[92%] mx-auto max-w-[1240px] px-6 py-4">
           <img src={cineverseLogo} alt="Cineverse" className="h-20 w-auto" />
         </div>
+
+        {/* Contact Details Modal */}
+        {isContactModalOpen && (
+          <div className="fixed inset-0 bg-[rgba(12,18,34,0.65)] flex items-center justify-center p-6 z-20" role="dialog" aria-modal="true">
+            <div className="bg-[#1a1d29] border border-[#2a2d3a] rounded-lg p-6 w-full max-w-[500px] max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-white">Contact Details</h2>
+                <button
+                  onClick={() => setIsContactModalOpen(false)}
+                  className="text-gray-400 hover:text-white text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Email Field */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">* Your email</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={contactDetails.email}
+                      onChange={(e) => setContactDetails({ ...contactDetails, email: e.target.value })}
+                      className="flex-1 bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                    />
+                    <button className="bg-[#252833] border border-[#2a2d3a] hover:bg-[#2d3140] px-4 py-3 rounded-lg text-sm text-gray-300">
+                      GPay Google
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">To access the ticket(s) on other devices, Login with this E-mail</p>
+                </div>
+
+                {/* Mobile Number Field */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">* Mobile Number</label>
+                  <div className="flex gap-2">
+                    <div className="flex items-center bg-[#252833] border border-[#2a2d3a] rounded-lg px-3">
+                      <span className="text-white text-sm">🇮🇳 +91</span>
+                    </div>
+                    <input
+                      type="tel"
+                      value={contactDetails.mobile}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 10)
+                        setContactDetails({ ...contactDetails, mobile: value })
+                      }}
+                      className="flex-1 bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#ff4d5a]"
+                      maxLength={10}
+                    />
+                    <button className="bg-[#252833] border border-[#2a2d3a] hover:bg-[#2d3140] px-4 py-3 rounded-lg text-sm text-gray-300 flex items-center gap-2">
+                      <span>+</span>
+                      <span>Add new</span>
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">This Number will only be used for sending ticket(s)</p>
+                </div>
+
+                {/* State Field */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">* State</label>
+                  <select
+                    value={contactDetails.state}
+                    onChange={(e) => setContactDetails({ ...contactDetails, state: e.target.value })}
+                    className="w-full bg-[#252833] border border-[#2a2d3a] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#ff4d5a]"
+                  >
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Kerala">Kerala</option>
+                  </select>
+                  <div className="bg-[#ff6b35]/20 border border-[#ff6b35]/50 rounded-lg p-3 mt-2">
+                    <p className="text-xs text-[#ff6b35]">Please select state based on your current location for GST purposes.</p>
+                  </div>
+                </div>
+
+                {/* Terms & Conditions */}
+                <div>
+                  <a href="#" className="text-sm text-[#ff4d5a] hover:underline">*Terms & Conditions</a>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  onClick={() => {
+                    if (contactDetails.email && contactDetails.mobile && contactDetails.state) {
+                      setIsContactModalOpen(false)
+                    }
+                  }}
+                  disabled={!contactDetails.email || !contactDetails.mobile || !contactDetails.state}
+                  className="w-full bg-[#ff4d5a] hover:bg-[#ff6b7a] text-white rounded-lg px-4 py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
